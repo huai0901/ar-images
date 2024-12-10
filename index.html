@@ -16,7 +16,7 @@
 </head>
 <body>
   <!-- AR.js 場景 -->
-  <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false; trackingMethod: best; pinchScaleEnabled: true;">
+  <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false; trackingMethod: best;">
     <!-- AR 標記：掃描圖片 A -->
     <a-marker preset="custom" type="pattern" url="https://raw.githubusercontent.com/huai0901/ar-images/main/markers/pattern-%E8%A2%AB%E6%8E%83%E7%9A%842.patt">
       <!-- 轉盤底部圖片 -->
@@ -53,6 +53,27 @@
 
     window.addEventListener("click", () => {
       isSpinning = !isSpinning;
+    });
+
+    // 縮放處理
+    let scale = 1;
+    let lastDistance = 0;
+
+    document.querySelector('a-scene').addEventListener('touchmove', (event) => {
+      if (event.touches.length === 2) {
+        const distance = Math.sqrt(
+          Math.pow(event.touches[0].pageX - event.touches[1].pageX, 2) + Math.pow(event.touches[0].pageY - event.touches[1].pageY, 2)
+        );
+        if (lastDistance !== 0) {
+          scale = scale * (distance / lastDistance);
+          rotatingWheel.setAttribute('scale', `${scale} ${scale} ${scale}`);
+        }
+        lastDistance = distance;
+      }
+    });
+
+    document.querySelector('a-scene').addEventListener('touchend', () => {
+      lastDistance = 0;
     });
   </script>
 </body>
