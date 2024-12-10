@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AR 轉盤</title>
   <!-- 引入 AR.js -->
-  <script src="https://cdn.jsdelivr.net/gh/jeromeetienne/ar.js/aframe/build/aframe-ar.min.js"></script>
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/jeromeetienne/ar.js/aframe/build/aframe-ar.js"></script>
   <style>
     body {
       margin: 0;
@@ -17,13 +18,12 @@
   <!-- AR.js 場景 -->
   <a-scene embedded arjs>
     <!-- AR 標記：掃描圖片 A (對應 .patt 文件) -->
-    <a-marker preset="custom" type="pattern" url="https://raw.githubusercontent.com/huai0901/ar-images/refs/heads/main/markers/pattern-%E8%A2%AB%E6%8E%83%E7%9A%842.patt">
+    <a-marker preset="custom" type="pattern" url="https://raw.githubusercontent.com/huai0901/ar-images/main/markers/pattern-%E8%A2%AB%E6%8E%83%E7%9A%842.patt">
       <!-- 圖片 B：轉盤底部 (固定不動) -->
-      <a-image src="https://github.com/huai0901/ar-images/blob/main/images/%E8%BD%89%E7%9B%A41.png?raw=true" position="0 0 0" rotation="0 0 0" width="2" height="2"></a-image>
+      <a-image src="https://raw.githubusercontent.com/huai0901/ar-images/main/images/%E8%BD%89%E7%9B%A41.png" position="0 0 0" rotation="0 0 0" width="2" height="2"></a-image>
 
       <!-- 圖片 C：轉盤上層 (會旋轉) -->
-      <a-image id="rotating-wheel" src="https://github.com/huai0901/ar-images/blob/main/images/%E8%BD%89%E7%9B%A42.png?raw=true" position="0 0 0.01" rotation="0 0 0" width="1.8" height="1.8">
-      </a-image>
+      <a-image id="rotating-wheel" src="https://raw.githubusercontent.com/huai0901/ar-images/main/images/%E8%BD%89%E7%9B%A42.png" position="0 0 0.01" rotation="0 0 0" width="1.8" height="1.8"></a-image>
     </a-marker>
 
     <!-- AR 相機 -->
