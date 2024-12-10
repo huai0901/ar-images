@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AR 轉盤</title>
+  <!-- 引入 AR.js -->
+  <script src="https://cdn.jsdelivr.net/gh/jeromeetienne/ar.js/aframe/build/aframe-ar.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden; /* 隱藏捲軸 */
+    }
+  </style>
+</head>
+<body>
+  <!-- AR.js 場景 -->
+  <a-scene embedded arjs>
+    <!-- AR 標記：掃描圖片 A (對應 .patt 文件) -->
+    <a-marker preset="custom" type="pattern" url="https://raw.githubusercontent.com/huai0901/ar-images/refs/heads/main/markers/pattern-%E8%A2%AB%E6%8E%83%E7%9A%842.patt">
+      <!-- 圖片 B：轉盤底部 (固定不動) -->
+      <a-image src="https://github.com/huai0901/ar-images/blob/main/images/%E8%BD%89%E7%9B%A41.png?raw=true" position="0 0 0" rotation="0 0 0" width="2" height="2"></a-image>
+
+      <!-- 圖片 C：轉盤上層 (會旋轉) -->
+      <a-image id="rotating-wheel" src="https://github.com/huai0901/ar-images/blob/main/images/%E8%BD%89%E7%9B%A42.png?raw=true" position="0 0 0.01" rotation="0 0 0" width="1.8" height="1.8">
+      </a-image>
+    </a-marker>
+
+    <!-- AR 相機 -->
+    <a-entity camera></a-entity>
+  </a-scene>
+
+  <!-- 控制旋轉的 JavaScript -->
+  <script>
+    // 選取旋轉的圖片
+    const rotatingWheel = document.getElementById("rotating-wheel");
+    
+    // 初始旋轉狀態
+    let isSpinning = true; // 轉盤是否旋轉
+    let rotationSpeed = 2; // 旋轉速度 (每幀度數)
+
+    // 每幀執行的動畫函數
+    function rotate() {
+      if (isSpinning) {
+        // 取得當前旋轉角度
+        const currentRotation = rotatingWheel.getAttribute("rotation");
+        // 增加旋轉角度
+        const newRotation = {
+          x: currentRotation.x,
+          y: currentRotation.y + rotationSpeed, // 水平旋轉
+          z: currentRotation.z
+        };
+        // 更新旋轉角度
+        rotatingWheel.setAttribute("rotation", newRotation);
+      }
+      // 下一幀執行
+      requestAnimationFrame(rotate);
+    }
+
+    // 開始旋轉動畫
+    rotate();
+
+    // 點擊螢幕停止旋轉
+    window.addEventListener("click", () => {
+      isSpinning = !isSpinning; // 切換旋轉狀態
+    });
+  </script>
+</body>
+</html>
