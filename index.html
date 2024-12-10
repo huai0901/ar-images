@@ -16,7 +16,7 @@
 </head>
 <body>
   <!-- AR.js 場景 -->
-  <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false; trackingMethod: best;">
+  <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false; trackingMethod: best; pinchScaleEnabled: true;">
     <!-- AR 標記：掃描圖片 A -->
     <a-marker preset="custom" type="pattern" url="https://raw.githubusercontent.com/huai0901/ar-images/main/markers/pattern-%E8%A2%AB%E6%8E%83%E7%9A%842.patt">
       <!-- 轉盤底部圖片 -->
@@ -27,7 +27,7 @@
     </a-marker>
 
     <!-- 相機設置 -->
-    <a-entity camera position="0 1.5 4" near="0.1" far="10" fov="50"></a-entity>
+    <a-entity camera position="0 1.5 4" near="0.1" far="10" fov="60"></a-entity>
 
   </a-scene>
 
@@ -58,5 +58,6 @@
   </script>
 </body>
 </html>
+
 
 
