@@ -16,7 +16,7 @@
 </head>
 <body>
   <!-- AR.js 場景 -->
-  <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false; trackingMethod: best;">
+  <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false; trackingMethod: best; cameraParameters: https://jeromeetienne.github.io/AR.js/data/camera_para.dat; videoTexture: true;">
     <!-- AR 標記：掃描圖片 A -->
     <a-marker preset="custom" type="pattern" url="https://raw.githubusercontent.com/huai0901/ar-images/main/markers/pattern-%E8%A2%AB%E6%8E%83%E7%9A%842.patt">
       <!-- 轉盤底部圖片 -->
@@ -26,16 +26,19 @@
       <a-image id="rotating-wheel" src="https://raw.githubusercontent.com/huai0901/ar-images/main/images/%E8%BD%89%E7%9B%A42.png" position="0 0 0.01" rotation="0 0 0" width="1.8" height="1.8"></a-image>
     </a-marker>
 
-    <!-- 相機設置 -->
-    <a-entity camera position="0 0 0" near="0.1" far="10" fov="80"></a-entity>
+    <!-- 設置相機的視角，避免偏斜 -->
+    <a-entity camera="fov: 75; active: true; look-controls: false;" position="0 1.5 3" rotation="0 0 0" near="0.5" far="10"></a-entity>
   </a-scene>
 
-  <!-- 控制旋轉的 JavaScript -->
+  <!-- 控制旋轉和縮放的 JavaScript -->
   <script>
     const rotatingWheel = document.getElementById("rotating-wheel");
     let isSpinning = true;
     let rotationSpeed = 2;
+    let scale = 1;
+    let lastDistance = 0;
 
+    // 旋轉邏輯
     function rotate() {
       if (isSpinning) {
         const currentRotation = rotatingWheel.getAttribute("rotation");
@@ -54,9 +57,41 @@
     window.addEventListener("click", () => {
       isSpinning = !isSpinning;
     });
+
+    // 觸控事件來處理縮放
+    document.querySelector('a-scene').addEventListener('touchmove', (event) => {
+      if (event.touches.length === 2) {
+        const distance = Math.sqrt(
+          Math.pow(event.touches[0].pageX - event.touches[1].pageX, 2) + Math.pow(event.touches[0].pageY - event.touches[1].pageY, 2)
+        );
+        if (lastDistance !== 0) {
+          scale = scale * (distance / lastDistance);
+          scale = Math.max(0.5, Math.min(3, scale));  // 限制縮放範圍
+          rotatingWheel.setAttribute('scale', `${scale} ${scale} ${scale}`);
+        }
+        lastDistance = distance;
+      }
+    });
+
+    document.querySelector('a-scene').addEventListener('touchend', () => {
+      lastDistance = 0;
+    });
+
+    // 自動縮放邏輯
+    function autoZoom() {
+      // 每隔一段時間，根據場景進行縮放
+      setInterval(() => {
+        const newScale = scale * 1.05;  // 每次放大1.05倍
+        scale = Math.min(newScale, 3);  // 限制最大縮放
+        rotatingWheel.setAttribute('scale', `${scale} ${scale} ${scale}`);
+      }, 2000);  // 每兩秒調整一次
+    }
+
+    autoZoom();
   </script>
 </body>
 </html>
+
 
 
 
